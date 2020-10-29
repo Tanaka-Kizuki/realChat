@@ -4,6 +4,14 @@
                <textarea v-model="message"></textarea>
                <br>
                <button type="button" @click="send()">送信</button>
+
+               <div v-for="m in messages">
+                    <!-- 登録された日時 -->
+                    <span v-text="m.created_at"></span>：&nbsp;
+                    <!-- メッセージ内容 -->
+                    <span v-text="m.body"></span>
+
+               </div>
           </div>
 
           <script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.min.js"></script>
@@ -14,7 +22,8 @@
           new Vue({
                el:'#chat',
                data:{
-                    message:''
+                    message:'',
+                    messages:[],
                },
                methods:{
                     send:function() {
@@ -23,7 +32,16 @@
                          axios.post(url,params).then((response) => {
                               this.message= "";
                          })
-                    }
+                    },
+                    getMessages:function() {
+                         const url = '/ajax/chat';
+                         axios.get(url).then((response) => {
+                              this.messages = response.data;
+                         })
+                    },
+               },
+               mounted: function() {
+                    this.getMessages();
                }
           })
 
