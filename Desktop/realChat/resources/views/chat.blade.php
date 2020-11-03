@@ -43,6 +43,10 @@
                },
                mounted: function() {
                     this.getMessages();
+                    Echo.channel('chat').listen('MessageCreated', (e) => {
+                         this.getMessages(); // 全メッセージを再読込
+
+                    });
                }
           })
 
